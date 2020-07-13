@@ -1,29 +1,142 @@
-import React, { useState, useContext, Fragment } from "react";
+import React, { useState, useContext, Fragment, useCallback, useEffect } from "react";
 import { RecipeContext } from "../contexts/RecipeContext";
+import {Select} from "@shopify/polaris";
+import CurrencyInput from 'react-currency-input-field';
+import {Autocomplete, Icon, TextField, AppProvider} from '@shopify/polaris';
+import {SearchMinor} from '@shopify/polaris-icons';
+import moment from "moment";
 
 const RecipeForm = (props) => {
   
   const { addRecipe } = useContext(RecipeContext);
-  const [date, setDate] = useState(props.date ? props.date : '');
-  const [title, setTitle] = useState(props.title  ? props.title : '')
-  const [description, setDescription] = useState(props.description  ? props.description : '');
-  const [currentStep, setCurrentStep] = useState("");
-  const [editStep, setEditStep] = useState(false);
-  const [steps, setSteps] = useState(props.steps  ? props.steps : []);
-  const [counter, setCounter] = useState(0)
-  const [time, setTime] = useState('');
-  let stepPlaceholder = `Write step ${counter + 1}. Once done, press enter to get to step ${counter + 2}.`
+  const [options, setOptions] = useState([])
+  const [query, setQuery] = useState('')
+  const [date, setDate] = useState('');
+  const [cost, setCost] = useState(0);
+  const [company, setCompany] = useState('')
+  const [stock, setStock] = useState('');
+  const [shares, setShares] = useState(1);
+
+  useEffect(() => {
+    getHistorical(
+      {
+        stock: stock,
+        interval: "daily",
+        start: date,
+        end: date,
+        shares: shares
+      }
+    )
+
+  }, [date, shares])
   
   const handleSubmit = e => {
     e.preventDefault(); //prevents page from being refreshed
-    addRecipe(date, description, title, steps); //Add steps to context
-    setDate("");
-    setDescription("");
-    setTitle('')
-    setSteps([]);
-    setCurrentStep('');
-    setCounter(0)
+    // addRecipe(date, description, title, steps); //Add steps to context
+    // setDate("");
+    // setCompany('');
+    // setCost(0);
+    // setStock('');
+    // setShares(1);
+    // fetchStocks()
+    
   };
+
+  const handleButton = e => {
+    e.preventDefault(); //prevents page from being refreshed
+    // addRecipe(date, description, title, steps); //Add steps to context
+    setDate("");
+    setCompany('');
+    setCost(0);
+    setStock('');
+    setShares(1);
+    fetchStocks()
+    
+  };
+
+  const get = {
+    "method": "GET",
+    "headers": {
+      "Accept": "application/json",
+      "Authorization": "Bearer ugQFa1vAGcLGq4LXMnBCN7VY5frW",
+      // "Access-Control-Allow-Headers": "*"
+    }
+  }
+
+  const getHistorical = (query) => {
+    fetch(`https://sandbox.tradier.com/v1/markets/history?symbol=${query.stock}&interval=${query.interval}&start=${query.start}&end=${query.end}`, get)
+    .then(function(response) {
+      // The response is a Response instance.
+      // You parse the data into a useable format using `.json()`
+      return response.json();
+    }).then(function(data) {
+      // `data` is the parsed version of the JSON returned from the above endpoint.
+      console.log(data);
+      if (query.start === query.end) {
+        setCost(query.shares*(data?.history?.day?.high + data?.history?.day?.low)/2) 
+      }
+      
+
+    })
+    .catch(err => {
+      console.log(err);
+    });
+  }
+  
+
+  const fetchStocks = (query) => {
+    
+    fetch(`https://sandbox.tradier.com/v1/markets/quotes?symbols=${query}`, get)
+    .then(function(response) {
+      // The response is a Response instance.
+      // You parse the data into a useable format using `.json()`
+      return response.json();
+    }).then(function(data) {
+      // `data` is the parsed version of the JSON returned from the above endpoint.
+      console.log(data);
+      setCompany(data?.quotes?.quote?.description)  
+
+    })
+    .catch(err => {
+      console.log(err);
+    });
+
+  }
+
+  const searchStock = (query) => {
+    fetch(`https://sandbox.tradier.com/v1/markets/lookup?q=${query}`, get)
+    .then(function(response) {
+      return response.json();
+    }).then(function(data) {
+      console.log(data);
+      
+      (data.securities.security.length > 1) ? 
+      setOptions(
+        data?.securities?.security?.map(item => ({value: item.symbol, label: `${item.symbol} - ${item.description}`}))
+      ) 
+      :
+      setOptions(
+        [{value: data?.securities?.security?.symbol, label: `${data?.securities?.security?.symbol} - ${data?.securities?.security?.description}`}]
+      )
+
+      // console.log(options)
+      // console.log(data?.securities?.security?.map(item => ({value: item.symbol, label: `${item.symbol} - ${item.description}`})))
+    })
+    .catch(err => {
+      console.log(err);
+    });
+  }
+
+  const updateText = useCallback(
+    (value) => {
+      setQuery(value)
+      if (value === '') {
+        setOptions([])
+        return
+      }
+      setOptions(searchStock())
+    }
+  )
 
   const SectionHead = (label) => {
     return(
@@ -35,111 +148,101 @@ const RecipeForm = (props) => {
     )
 
   }
-  let newSteps;
+
+  const textField = (
+    <Autocomplete.TextField
+      onChange={updateText}
+      label="Symbols"
+      value={query}
+      prefix={<Icon source={SearchMinor} color="inkLighter" />}
+      placeholder="Search"
+    />
+  );
+  
   
   return (
-    <form onSubmit={handleSubmit} style = {{backgroundColor: "#EFEFFF"}}>
+    
+    <form onSubmit={e => {handleSubmit(e)}} style = {{backgroundColor: "#EFEFFF"}}>
       <div className = "col-12">
         <div className="row">
         
         
-          <div className="col-9">
-            {SectionHead('Title')}
-            <textarea className="text_edit"
-            name="textarea"
-            rows="1"
-            cols="5"
-            placeholder="Give your recipe a title!"
-            value={title}
-            onChange={e => setTitle(e.target.value)}
-            required
-          />
-          </div>
+          
           <div class="col-3">
           {SectionHead('Date')}
             <input
             type="date"
             placeholder="date"
             value={date}
-            onChange={e => setDate(e.target.value)}
+            onChange={e => {e.target.value <= moment().format("YYYY-MM-DD") && setDate(e.target.value)}}
             required
           />
           </div>
         </div>
       </div>
-        <div className="col-12">
-          {SectionHead('Description')}
-          <textarea className="text_edit"
-          name="textarea"
-          rows="4"
-          cols="5"
-          placeholder="Please describe your marvelous creation..."
-          value={description}
-          onChange={e => setDescription(e.target.value)}
-          required
-        />
-        </div>
-        <div className="col-12">
-          {/* <div className = "row"> */}
-            {SectionHead('Procedure')}
-          {/* </div> */}
-          {/* <div className = "col-12"> */}
-            <ol>
-              {steps.map((step, index) => {
-                if (index == counter) { 
-                  return(//Write some css
-                    <div style = {{backgroundColor: "#FFFFCF", overflowWrap: "break-word", cursor: "pointer"}}> 
-                      <div style = {{height: 2}}/>
-                      <li style = {{textAlign: "left"}} onClick = {() => {setCurrentStep(step); setCounter(index)}}>
-                        {step}
-                      </li>
-                      
-                    </div>
-                  ) 
-                  } else {
-                    return(
-                      <div style = {{ overflowWrap: "break-word", cursor: "pointer"}}>
-                        <div style = {{height: 5}}/>
-                        <li style = {{textAlign: "left"}} onClick = {() => {setCurrentStep(step); setCounter(index)}}>
-                          {step}
-                        </li>
-                        
-
-                      </div>
-                    )
-                  }
-              })}
-            </ol>
-          {/* </div> */}
+        
+        <div className="col-4">
+          
+          {SectionHead('Ticker')}
           
           <textarea className="text_edit"
           name="textarea"
-          rows="4"
+          rows="1"
           cols="5"
-          placeholder= {stepPlaceholder}
-          value={currentStep}
+          placeholder= {"Search for symbols"}
+          value={stock}
           onKeyDown={e => {
             if (e.keyCode === 13) {
-              if (currentStep.match(/.*\S.*/)) {
-                newSteps = steps
-                newSteps[counter] = e.target.value.trim()
-                setSteps(newSteps)
-                setCounter(steps.length)               
-              }
-              setCurrentStep('')
-              console.log(steps)
+              e.preventDefault();
+              searchStock(stock)
+              console.log(options)
             }
           }}
-          onChange={e => {e.keyCode != 13 && setCurrentStep(e.target.value); currentStep === '\n' && setCurrentStep(e.target.value)}}
+          onChange={e => {setStock(e.target.value)}}
         />
+        <AppProvider>
+          <Select
+            options={options}
+            onChange={selected => setStock(selected)}
+            value={stock}
+          />
+        </AppProvider>
 
 
+       
+
+        <div className = "col4">
+          
+          {SectionHead('Shares')}
+          <AppProvider>
+            <TextField
+              type="number"
+              value={shares}
+              onKeyDown={e => {
+                if (e.keyCode === 13) {
+                  e.preventDefault();                  
+                }
+              }}
+              onChange={value => {setShares(value)}}
+            />
+          </AppProvider>
         </div>
-        <div className = "col-12" style = {{textAlign: "right"}}><h2>Step {counter + 1}</h2></div>
-  
-      {/* </div> */}
-      
-      {props.button && <input type="submit"  value={props.button} />}
+        <div className = "col4">
+          
+          {SectionHead('Cost')}
+          
+          <CurrencyInput
+            value = {cost}
+            placeholder="$1,000"
+            defaultValue={0}
+            allowDecimals={true}
+            decimalsLimit={2}
+            prefix = "$"
+            onChange={(value) => setCost(cost)}
+          />
+        </div>
+      </div>
+      {props.button && <input type="button"  value={props.button} onClick = {e => {handleButton(e)}}/>}
       <div style = {{height: 10}}/>
     </form>
   );

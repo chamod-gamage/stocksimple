@@ -7,7 +7,6 @@ import "./index.css";
 import RecipeContextProvider from "./contexts/RecipeContext";
 import RecipeForm from "./components/RecipeForm";
 import ReactGA from 'react-ga';
-
 function App() {
 
   useEffect(() => {
@@ -16,15 +15,19 @@ function App() {
   }, [])
 
   return (
+    
     <div className="App">
       <div className="container mt-5">
         <RecipeContextProvider>
           <Header />
+          
           <RecipeForm button = {"Add Entry"} />
+          
           <RecipeList />
         </RecipeContextProvider>
       </div>
     </div>
+    
   );
 }
 
