@@ -13,6 +13,7 @@ const RecipeForm = (props) => {
   const [query, setQuery] = useState('')
   const [date, setDate] = useState('');
   const [cost, setCost] = useState(0);
+  const [price, setPrice] = useState(0);
   const [company, setCompany] = useState('')
   const [stock, setStock] = useState('');
   const [shares, setShares] = useState(1);
@@ -73,6 +74,7 @@ const RecipeForm = (props) => {
       // `data` is the parsed version of the JSON returned from the above endpoint.
       console.log(data);
       if (query.start === query.end) {
+        setPrice((data?.history?.day?.high + data?.history?.day?.low)/2)
         setCost(query.shares*(data?.history?.day?.high + data?.history?.day?.low)/2) 
       }
       
@@ -183,7 +185,7 @@ const RecipeForm = (props) => {
         
         <div className="col-4">
           
-          {SectionHead('Ticker')}
+          {SectionHead('Symbol')}
           
           <textarea className="text_edit"
           name="textarea"
@@ -238,7 +240,21 @@ const RecipeForm = (props) => {
             allowDecimals={true}
             decimalsLimit={2}
             prefix = "$"
-            onChange={(value) => setCost(cost)}
+            onChange={(value) => {setCost(value); setPrice(value/shares)}}
+          />
+        </div>
+        <div className = "col4">
+          
+          {SectionHead('Share Price')}
+          
+          <CurrencyInput
+            value = {price}
+            placeholder="$1,000"
+            defaultValue={0}
+            allowDecimals={true}
+            decimalsLimit={2}
+            prefix = "$"
+            onChange={(value) => {setPrice(value); setCost(value*shares)}}
           />
         </div>
       </div>
