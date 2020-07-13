@@ -29,7 +29,7 @@ const RecipeForm = (props) => {
       }
     )
 
-  }, [date, shares])
+  }, [date, shares,stock])
   
   const handleSubmit = e => {
     e.preventDefault(); //prevents page from being refreshed
