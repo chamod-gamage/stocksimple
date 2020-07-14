@@ -76,6 +76,7 @@ textarea:focus {
 }
 
 .recipe-cards {
+  background-color: #363636;
   margin: auto;
   margin-top: 40px;
   width: 100%;

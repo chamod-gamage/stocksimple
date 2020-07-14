@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import Header from "./components/Header";
-import RecipeList from "./components/RecipeList";
+import StockList from "./components/StockList";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@shopify/polaris/styles.css";
 import "./index.css";
@@ -20,9 +20,8 @@ function App() {
           <Header />
 
           <RecipeForm button={"Add Holding"} />
-          <div style={{ height: 1000 }} />
 
-          <RecipeList />
+          <StockList />
         </PortfolioContextProvider>
       </div>
     </div>

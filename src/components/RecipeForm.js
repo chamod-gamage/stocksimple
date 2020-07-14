@@ -16,6 +16,7 @@ import SearchIcon from "@material-ui/icons/Search";
 const RecipeForm = props => {
   const { addStock } = useContext(PortfolioContext);
   const [options, setOptions] = useState([]);
+  const [description, setDescription] = useState()
   const [query, setQuery] = useState("");
   const [date, setDate] = useState("");
   const [cost, setCost] = useState(0);
@@ -25,8 +26,11 @@ const RecipeForm = props => {
   const [shares, setShares] = useState(1);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(0);
+  const [trigger, setTrigger] = useState(false)
+  const [click, setClick] = useState(0)
 
   useEffect(() => {
+    console.log(date)
     getHistorical({
       stock: stock,
       interval: "daily",
@@ -37,8 +41,8 @@ const RecipeForm = props => {
   }, [date, stock]);
 
   useEffect(() => {
-    fetchStocks(stock.symbol);
-  }, [stock]);
+    fetchStocks(stock);
+  }, [click]);
 
   const handleSubmit = e => {
     e.preventDefault(); //prevents page from being refreshed
@@ -54,12 +58,8 @@ const RecipeForm = props => {
   const handleButton = e => {
     e.preventDefault(); //prevents page from being refreshed
     // addRecipe(date, description, title, steps); //Add steps to context
-    setDate("");
-    setCompany("");
-    setCost(0);
-    setStock("");
-    setShares(1);
-    addStock(stock.symbol, stock.description, date, price, shares, value);
+    
+    
   };
 
   const get = {
@@ -94,6 +94,8 @@ const RecipeForm = props => {
               2
           );
         }
+        
+
       })
       .catch(err => {
         console.log(err);
@@ -111,6 +113,13 @@ const RecipeForm = props => {
         // `data` is the parsed version of the JSON returned from the above endpoint.
         console.log(data);
         setValue(data?.quotes?.quote?.last);
+        setDescription(data?.quotes?.quote?.description)
+        addStock(stock, data?.quotes?.quote?.description, date, price, shares, data?.quotes?.quote?.last);
+        setDate("");
+        setCompany("");
+        setCost(0);
+        setStock("");
+        setShares(1);
       })
       .catch(err => {
         console.log(err);
@@ -128,16 +137,14 @@ const RecipeForm = props => {
         data.securities.security.length > 1
           ? setOptions(
               data?.securities?.security?.map(item => ({
-                value: { symbol: item.symbol, description: item.description },
+                value: item.symbol,
                 label: `${item.symbol} - ${item.description}`
               }))
             )
           : setOptions([
               {
-                value: {
-                  symbol: data?.securities?.security?.symbol,
-                  description: data?.securities?.security?.symbol
-                },
+                value: data?.securities?.security?.symbol,
+                  
                 label: `${data?.securities?.security?.symbol} - ${
                   data?.securities?.security?.description
                 }`
@@ -173,15 +180,7 @@ const RecipeForm = props => {
     );
   };
 
-  const textField = (
-    <Autocomplete.TextField
-      onChange={updateText}
-      label="Symbols"
-      value={query}
-      prefix={<Icon source={SearchMinor} color="inkLighter" />}
-      placeholder="Search"
-    />
-  );
+
 
   return (
     <form
@@ -200,16 +199,18 @@ const RecipeForm = props => {
             name="textarea"
             rows="1"
             cols="5"
-            placeholder={"Search for stocks..."}
+            placeholder={"Search for stocks (press enter)..."}
             value={query}
             onKeyDown={e => {
               if (e.keyCode === 13) {
+                setTrigger(false)
                 e.preventDefault();
                 searchStock(query);
                 console.log(options);
               }
             }}
             onChange={e => {
+              setTrigger(true)
               setQuery(e.target.value);
               // searchStock(query);
             }}
@@ -217,9 +218,9 @@ const RecipeForm = props => {
           <AppProvider>
             <Select
               placeholder={
-                options.length === 0
-                  ? "Enter search parameter"
-                  : "Select stocks from here"
+                (trigger
+                  ? "Press enter to complete search"
+                  : (options.length === 0 ? "Enter search parameter" : "Select stocks from here")  )
               }
               options={options}
               onChange={selected => setStock(selected)}
@@ -234,11 +235,11 @@ const RecipeForm = props => {
             <TextField
               type="number"
               value={shares}
-              onKeyDown={e => {
-                if (e.keyCode === 13) {
-                  e.preventDefault();
-                }
-              }}
+              // onKeyDown={e => {
+              //   if (e.keyCode === 13) {
+              //     e.preventDefault();
+              //   }
+              // }}
               onChange={value => {
                 setShares(value);
                 setCost(value * price);
@@ -279,9 +280,6 @@ const RecipeForm = props => {
           />
         </div>
       </div>
-
-      {/* //it was bc we didnt close the div above ^^ the row  */}
-      {/* /* I'm going to edit the button style*/}
       <div
         style={{ margin: "auto", textAlign: "center" }}
         className="row m-3 align-items-center center"
@@ -289,6 +287,7 @@ const RecipeForm = props => {
         <div className="col-12 align-self-center">
           <button
             onClick={e => {
+              setClick(click + 1)
               handleButton(e);
             }}
             className="btn btn-primary"
