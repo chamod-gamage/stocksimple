@@ -23,7 +23,7 @@ const StockForm = props => {
   const [price, setPrice] = useState(0);
   const [company, setCompany] = useState("");
   const [stock, setStock] = useState("");
-  const [shares, setShares] = useState(1);
+  const [shares, setShares] = useState(0);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(0);
   const [trigger, setTrigger] = useState(false)
@@ -117,10 +117,10 @@ const StockForm = props => {
         addStock(stock, data?.quotes?.quote?.description, date, price, shares, data?.quotes?.quote?.last);
         setDate("");
         setCompany("");
-        setPrice();
+        setPrice(0);
         setCost(0);
         setStock("");
-        setShares(1);
+        setShares(0);
       })
       .catch(err => {
         console.log(err);
@@ -270,7 +270,7 @@ const StockForm = props => {
           <CurrencyInput
             value={price}
             style={{ height: 50, borderRadius: 7, width: "100%" }}
-            placeholder="$1,000"
+            placeholder="$"
             defaultValue={0}
             allowDecimals={true}
             decimalsLimit={2}
@@ -288,12 +288,14 @@ const StockForm = props => {
         className="row m-3 align-items-center center"
       >
         <div className="col-12 align-self-center">
+          
           <button
             onClick={e => {
               setClick(click + 1)
               handleButton(e);
             }}
             className="btn btn-primary"
+            disabled = {!(stock && date && shares > 0 && price > 0)} 
           >
             {" "}
             <h2> {props.button} </h2>
