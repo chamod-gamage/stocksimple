@@ -9,8 +9,9 @@ import StockForm from "./components/StockForm";
 import ReactGA from "react-ga";
 function App() {
   useEffect(() => {
-    ReactGA.initialize("UA-170137058-2");
+    ReactGA.initialize('UA-170137058-3');
     ReactGA.pageview("/homepage");
+    
   }, []);
 
   return (
@@ -22,6 +23,7 @@ function App() {
           <StockForm button={"Add Holding"} />
 
           <StockList />
+          
         </PortfolioContextProvider>
       </div>
     
