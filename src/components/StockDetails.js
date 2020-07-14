@@ -73,11 +73,20 @@ const StockDetails = (props) => {
           
         </div>
       </div>
+      <div className = "row m-3">
+        <div className="col-6">
+          <div style={{ float: "left", textAlign: "left", paddingTop: 10, paddingBottom: 10 }}>
+            
+            <h2>Shares: {stocks[props.index]?.shares}</h2>
+          </div>
+        </div>
+        
+        <div className="col-6">
       <div
-        style={{ margin: "auto", textAlign: "center" }}
+        style={{ margin: "auto", textAlign: "right" }}
         className="row m-3 align-items-center center"
       >
-        <div className="col-12 align-self-center">
+        <div style = {{padding: 0}}className="col-12 align-self-center">
           <button
             
             onClick={e => {
@@ -92,6 +101,8 @@ const StockDetails = (props) => {
             </div>
           </button>
         </div>
+      </div>
+      </div>
       </div>
       </AppProvider>
     </div>
