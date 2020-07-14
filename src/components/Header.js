@@ -18,7 +18,7 @@ const Header = () => {
           <h1 style = {{fontSize: 40}}>📈</h1>
           <div style={{ height: 10 }} />
           {stocks?.length > 0  ? (
-              <h1> Your current balance is ${Math.floor(val*100)/100} ({val/prices > 1 && '+'}{((val/prices)*100 - 100).toFixed(2)}% returns)</h1>
+              <h1> Your current balance is ${val.toFixed(2)} ({val/prices > 1 && '+'}{((val/prices)*100 - 100).toFixed(2)}% returns)</h1>
             ) : (
               <h1>Start tracking your stocks today!</h1>
             )}
