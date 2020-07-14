@@ -241,6 +241,7 @@ const StockForm = props => {
               //     e.preventDefault();
               //   }
               // }}
+              required
               onChange={value => {
                 setShares(value);
                 setCost(value * price);
@@ -278,6 +279,7 @@ const StockForm = props => {
               setPrice(value);
               setCost(value * shares);
             }}
+            required
           />
         </div>
       </div>
