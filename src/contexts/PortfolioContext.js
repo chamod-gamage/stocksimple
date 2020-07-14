@@ -4,67 +4,60 @@ import _ from "lodash";
 export const PortfolioContext = createContext();
 
 const PortfolioContextProvider = props => {
-  const [recipes, setRecipes] = useState(
-    JSON.parse(localStorage.getItem("recipes")),
-    []
-  );
-
   const [stocks, setStocks] = useState(
     JSON.parse(localStorage.getItem("stocks")),
     []
   );
 
   useEffect(() => {
-    localStorage.setItem("recipes", JSON.stringify(recipes));
     localStorage.setItem("stocks", JSON.stringify(stocks));
-  }, [recipes]);
+  }, [stocks]);
 
   //hello can you stop changing the names i cant see what im doing... this should be last
   //we need to still make the lsit show up
   //cant do any of the front end stuff when its like this go ahead lol i just made it match so it doesnt crash
   // its not working it keep sl
-  const addRecipe = (symbol, description, date, price, shares, value) => {
-    if (!recipes) {
-      setRecipes([
+  const addStock = (symbol, description, date, price, shares, value) => {
+    if (!stocks) {
+      setStocks([
         { symbol, description, date, price, shares, value, id: uuidv4() }
       ]);
       return;
     }
-    setRecipes(
+    setStocks(
       _.orderBy(
         [
-          ...recipes,
+          ...stocks,
           { symbol, description, date, price, shares, value, id: uuidv4() }
         ],
-        ["date"],
-        ["desc"]
+        ["symbol"],
+        ["asc"]
       )
     );
+    console.log(stocks);
   };
 
-  const removeRecipe = id => {
-    setRecipes(recipes?.filter(recipe => recipe.id !== id));
+  const removeStock = id => {
+    setStocks(stocks?.filter(stock => stock.id !== id));
   };
 
-  const editRecipe = (id, newText, newTitle, newSteps, newDate) => {
-    let newRecipes = recipes;
+  // const editRecipe = (id, newText, newTitle, newSteps, newDate) => {
+  //   let newRecipes = recipes;
 
-    for (let i = 0; i < recipes.length; i++) {
-      if (recipes[i].id === id) {
-        newRecipes[i].description = newText;
-        newRecipes[i].title = newTitle;
-        newRecipes[i].steps = newSteps;
-        newRecipes[i].date = newDate;
-        setRecipes(newRecipes);
-        localStorage.setItem("recipes", JSON.stringify(newRecipes));
-      }
-    }
-  };
+  //   for (let i = 0; i < recipes.length; i++) {
+  //     if (recipes[i].id === id) {
+  //       newRecipes[i].description = newText;
+  //       newRecipes[i].title = newTitle;
+  //       newRecipes[i].steps = newSteps;
+  //       newRecipes[i].date = newDate;
+  //       setRecipes(newRecipes);
+  //       localStorage.setItem("recipes", JSON.stringify(newRecipes));
+  //     }
+  //   }
+  // };
 
   return (
-    <PortfolioContext.Provider
-      value={{ recipes, addRecipe, removeRecipe, editRecipe }}
-    >
+    <PortfolioContext.Provider value={{ stocks, addStock, removeStock }}>
       {props.children}
     </PortfolioContext.Provider>
   );
