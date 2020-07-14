@@ -24,7 +24,10 @@ function App() {
           <StockList />
         </PortfolioContextProvider>
       </div>
+    
+    <div style = {{height: 10}}/>
     </div>
+
   );
 }
 
