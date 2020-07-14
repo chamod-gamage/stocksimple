@@ -52,7 +52,7 @@ const StockDetails = ({ stock }) => {
         <div className="col-6">
           <div style={{ float: "right", paddingTop: 10, paddingBottom: 10 }}>
             
-            <h2>{Math.floor(stock.value* stock.shares * 100)/100}</h2>
+            <h2>${(stock.value* stock.shares).toFixed(2)}</h2>
           </div>
         </div>
       </div>
@@ -66,7 +66,7 @@ const StockDetails = ({ stock }) => {
         <div className="col-6">
         <div style={{ float: "right", paddingTop: 10, paddingBottom: 10 }}>
             
-        <h2>{Math.floor((stock.value/stock.price) * 10000)/100}%</h2>
+        <h2>{stock.value/stock.price > 0 && "+"}{  ((stock.value/stock.price)*100-100).toFixed(2)}%</h2>
           </div>
           
         </div>
