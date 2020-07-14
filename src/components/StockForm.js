@@ -14,7 +14,7 @@ import moment from "moment";
 import SearchIcon from "@material-ui/icons/Search";
 
 const StockForm = props => {
-  const { addStock } = useContext(PortfolioContext);
+  const { addStock, setUpdate } = useContext(PortfolioContext);
   const [options, setOptions] = useState([]);
   const [description, setDescription] = useState()
   const [query, setQuery] = useState("");

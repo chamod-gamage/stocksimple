@@ -8,6 +8,7 @@ const PortfolioContextProvider = props => {
     JSON.parse(localStorage.getItem("stocks")),
     []
   );
+  const [update, setUpdate] = useState(0);
 
   useEffect(() => {
     localStorage.setItem("stocks", JSON.stringify(stocks));
@@ -16,6 +17,10 @@ const PortfolioContextProvider = props => {
   useEffect(() => {
     fetchStocks()
   }, []);
+
+  useEffect(() => {
+    fetchStocks()
+  }, [update]);
 
   const get = {
     method: "GET",
@@ -54,6 +59,7 @@ const PortfolioContextProvider = props => {
       setStocks(newStocks)
       }
       setStocks(newStocks)
+      console.log(stocks)
     }
   };
 
@@ -102,7 +108,7 @@ const PortfolioContextProvider = props => {
   // };
 
   return (
-    <PortfolioContext.Provider value={{ stocks, addStock, removeStock }}>
+    <PortfolioContext.Provider value={{ stocks, addStock, removeStock, setUpdate }}>
       {props.children}
     </PortfolioContext.Provider>
   );
