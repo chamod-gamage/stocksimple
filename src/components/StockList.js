@@ -1,22 +1,23 @@
-import React, {useContext } from "react";
+import React, {useContext, useState } from "react";
 import "../index.css";
 import { PortfolioContext } from "../contexts/PortfolioContext";
 import StockDetails from "./StockDetails";
 
 const StockList = (props) => {
-  const { stocks, setUpdate } = useContext(PortfolioContext);
+  const { stocks, setUpdate, fetchStocks } = useContext(PortfolioContext);
+  
   return (
     <div style = {{width: "100%"}}>
       <div style = {{height: 10}}/>
       {console.log(stocks)}
       <ul style = {{padding:0}}>
-        {stocks?.map((stock) => {
-          return <div style = {{paddingTop: 10, paddingBottom: 10}}><StockDetails stock={stock} key={stock?.id} /></div>;
+        {stocks?.map((stock, index) => {
+          return <div style = {{paddingTop: 10, paddingBottom: 10}}>{console.log(index)}<StockDetails stock = {stock} index={index} /></div>;
         })}
       </ul>
       <button
             onClick={e => {
-              setUpdate(0)
+              fetchStocks()
             }}
             className="btn btn-primary"
           >

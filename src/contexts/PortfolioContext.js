@@ -35,14 +35,14 @@ const PortfolioContextProvider = props => {
     if(stocks?.length>0){
       let newStocks = [...stocks];
       for(let i = 0; i< stocks?.length; i++) {
-        fetch(`https://sandbox.tradier.com/v1/markets/quotes?symbols=${stocks.symbol}`, get)
+        fetch(`https://sandbox.tradier.com/v1/markets/quotes?symbols=${stocks[i].symbol}`, get)
           .then(function(response) {
             // The response is a Response instance.
             // You parse the data into a useable format using `.json()`
             return response.json();
           })
           .then(function(data) {
-            
+            console.log(data)
             // `data` is the parsed version of the JSON returned from the above endpoint.
             newStocks[i].description = stocks[i].description;
             newStocks[i].date = stocks[i].date;
@@ -56,7 +56,6 @@ const PortfolioContextProvider = props => {
             console.log(err);
           });
         
-      setStocks(newStocks)
       }
       setStocks(newStocks)
       console.log(stocks)
@@ -108,7 +107,7 @@ const PortfolioContextProvider = props => {
   // };
 
   return (
-    <PortfolioContext.Provider value={{ stocks, addStock, removeStock, setUpdate }}>
+    <PortfolioContext.Provider value={{ stocks, addStock, removeStock, setUpdate, fetchStocks }}>
       {props.children}
     </PortfolioContext.Provider>
   );
