@@ -1,11 +1,12 @@
-import React, {useContext, useState } from "react";
+import React, {useContext, useState, useEffect } from "react";
 import "../index.css";
 import { PortfolioContext } from "../contexts/PortfolioContext";
 import StockDetails from "./StockDetails";
 
 const StockList = (props) => {
+  const [trigger, setTrigger] = useState(0)
   const { stocks, setUpdate, fetchStocks } = useContext(PortfolioContext);
-  
+  useEffect(() => {fetchStocks(); setTrigger(0)}, [])
   return (
     <div style = {{width: "100%"}}>
       <div style = {{height: 10}}/>
