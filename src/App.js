@@ -18,9 +18,7 @@ function App() {
     <div className="App">
       <div className="container mt-5">
         <PortfolioContextProvider>
-          <Header />
-
-          <StockForm button={"Add Holding"} />
+          
 
           <StockList />
           

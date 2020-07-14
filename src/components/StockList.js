@@ -2,6 +2,8 @@ import React, {useContext, useState, useEffect } from "react";
 import "../index.css";
 import { PortfolioContext } from "../contexts/PortfolioContext";
 import StockDetails from "./StockDetails";
+import StockForm from "./StockForm"
+import Header from "./Header"
 
 const StockList = (props) => {
   const [trigger, setTrigger] = useState(0)
@@ -9,6 +11,9 @@ const StockList = (props) => {
   useEffect(() => {fetchStocks(); setTrigger(0)}, [])
   return (
     <div style = {{width: "100%"}}>
+      <Header />
+
+      <StockForm button={"Add Holding"} />  
       <div style = {{height: 10}}/>
       {console.log(stocks)}
       <ul style = {{padding:0}}>

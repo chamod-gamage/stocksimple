@@ -79,6 +79,7 @@ const StockDetails = (props) => {
       >
         <div className="col-12 align-self-center">
           <button
+            
             onClick={e => {
               removeStock(stocks[props.index].id)
             }}
