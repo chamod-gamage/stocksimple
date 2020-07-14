@@ -5,7 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "@shopify/polaris/styles.css";
 import "./index.css";
 import PortfolioContextProvider from "./contexts/PortfolioContext";
-import RecipeForm from "./components/RecipeForm";
+import StockForm from "./components/StockForm";
 import ReactGA from "react-ga";
 function App() {
   useEffect(() => {
@@ -19,7 +19,7 @@ function App() {
         <PortfolioContextProvider>
           <Header />
 
-          <RecipeForm button={"Add Holding"} />
+          <StockForm button={"Add Holding"} />
 
           <StockList />
         </PortfolioContextProvider>

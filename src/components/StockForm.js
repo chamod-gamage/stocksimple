@@ -13,7 +13,7 @@ import { SearchMinor } from "@shopify/polaris-icons";
 import moment from "moment";
 import SearchIcon from "@material-ui/icons/Search";
 
-const RecipeForm = props => {
+const StockForm = props => {
   const { addStock } = useContext(PortfolioContext);
   const [options, setOptions] = useState([]);
   const [description, setDescription] = useState()
@@ -304,4 +304,4 @@ const RecipeForm = props => {
   );
 };
 
-export default RecipeForm;
+export default StockForm;

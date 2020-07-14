@@ -1,6 +1,6 @@
 import React, { Fragment, useContext, useState } from "react";
 import { PortfolioContext } from "../contexts/PortfolioContext";
-import RecipeForm from "./RecipeForm"
+import RecipeForm from "./StockForm"
 import { AppProvider, Card } from "@shopify/polaris";
 
 // need access to learn inside this component
@@ -38,50 +38,39 @@ const StockDetails = ({ stock }) => {
   };
 
   return (
-    <div className="container mt-5" >
+    <div className="form"  >
       <AppProvider>
         {console.log(stock)}
-        <div className="portfolio-cards">
-          <Card
-            style = {{backgroundColor: "#363636"}}
-            subdued
-            title={!edit &&
-              <Fragment>
-              <div className = "row">
-              <div className = "col-6"><h2>{stock.symbol}</h2></div>
-              <div className = "col-6" style = {{textAlign: "right"}}><h2>{stock.value * stock.shares}</h2></div>
-              </div>
-              </Fragment>
-            }
-            primaryFooterAction={[
-              {
-                content: "Delete Entry",
-                destructive: true,
-                onAction: () => removeStock(stock.id),
-              },
-            ]}
-            // primaryFooterAction={
-            //   !edit
-            //     ? {
-            //         content: "Edit your recipe",
-            //         onAction: () => {
-            //           setEdit(true);
-            //         },
-            //       }
-            //     : {
-            //         content: "Save changes",
-            //         onAction: () => {
-            //           editRecipe(recipe.id, description, title, steps, date);
-            //           setEdit(false);
-            //         },
-            //       }
-            // }
-          >
-            <Card.Section style = {{backgroundColor: "#363636"}}>
-              {renderBody()}
-            </Card.Section>
-          </Card>
+        <div className="row m-3">
+        <div className="col-6">
+          <div style={{ float: "left", paddingTop: 10, paddingBottom: 10 }}>
+            <h2>{stock.symbol}</h2>
+          </div>
+          
         </div>
+
+        <div className="col-6">
+          <div style={{ float: "right", paddingTop: 10, paddingBottom: 10 }}>
+            
+            <h2>{Math.floor(stock.value* stock.shares * 100)/100}</h2>
+          </div>
+        </div>
+      </div>
+      <div className="row m-3">
+      <div className="col-6">
+        <div style={{ float: "left", textAlign: "left", paddingTop: 10, paddingBottom: 10 }}>
+            
+            <h2>{stock.description}</h2>
+          </div>
+          </div>
+        <div className="col-6">
+        <div style={{ float: "right", paddingTop: 10, paddingBottom: 10 }}>
+            
+        <h2>{Math.floor((stock.value/stock.price) * 10000)/100}%</h2>
+          </div>
+          
+        </div>
+      </div>
       </AppProvider>
     </div>
   );

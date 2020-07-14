@@ -2,24 +2,30 @@ import React, { useContext } from "react";
 import { PortfolioContext } from "../contexts/PortfolioContext";
 
 const Header = () => {
-  const { recipes } = useContext(PortfolioContext);
+
+  const { stocks } = useContext(PortfolioContext);
+  const val = stocks.reduce(function(prev, cur) {
+    return prev + cur.value*cur.shares;
+  }, 0);
+  const prices = stocks.reduce(function(prev, cur) {
+    return prev + cur.price*cur.shares;
+  }, 0);
   return (
-    <div className="container mt-5">
+    <div>
+    <div className="container mt-5" style = {{marginTop: -30}}>
       <div className="row">
         <div className="col">
           <h2>📈</h2>
           <div style={{ height: 10 }} />
-          {recipes?.length > 0 &&
-            (recipes?.length > 1 ? (
-              <h1> I've invested in {recipes?.length} stocks!</h1>
+          {stocks?.length > 0  ? (
+              <h1> Your current balance is ${Math.floor(val*100)/100} ({((val/prices)*100 - 100).toFixed(2)}% returns)</h1>
             ) : (
-              <h1>I've invested in {recipes?.length} stock!</h1>
-            ))}
-          {(recipes?.length <= 0 || !recipes) && (
-            <h1>Start tracking your stocks today!</h1>
-          )}
+              <h1>Start tracking your stocks today!</h1>
+            )}
+          
         </div>
       </div>
+    </div>
     </div>
   );
 };

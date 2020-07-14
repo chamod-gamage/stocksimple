@@ -7,10 +7,11 @@ const StockList = (props) => {
   const { stocks } = useContext(PortfolioContext);
   return (
     <div style = {{width: "100%"}}>
+      <div style = {{height: 10}}/>
       {console.log(stocks)}
       <ul style = {{padding:0}}>
         {stocks?.map((stock) => {
-          return <StockDetails stock={stock} key={stock.id} />;
+          return <div style = {{paddingTop: 10, paddingBottom: 10}}><StockDetails stock={stock} key={stock.id} /></div>;
         })}
       </ul>
     </div>
