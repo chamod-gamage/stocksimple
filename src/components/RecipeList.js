@@ -1,10 +1,10 @@
 import React, {useContext } from "react";
 import "../index.css";
-import { RecipeContext } from "../contexts/RecipeContext";
+import { PortfolioContext } from "../contexts/PortfolioContext";
 import RecipeDetails from "./RecipeDetails";
 
 const RecipeList = (props) => {
-  const { recipes } = useContext(RecipeContext);
+  const { recipes } = useContext(PortfolioContext);
   return (
     <div style = {{width: "100%"}}>
       <ul style = {{padding:0}}>

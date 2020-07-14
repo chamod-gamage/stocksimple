@@ -1,11 +1,11 @@
 import React, { Fragment, useContext, useState } from "react";
-import { RecipeContext } from "../contexts/RecipeContext";
+import { PortfolioContext } from "../contexts/PortfolioContext";
 import RecipeForm from "../components/RecipeForm"
 import { AppProvider, Card } from "@shopify/polaris";
 
 // need access to learn inside this component
 const RecipeDetails = ({ recipe }) => {
-  const { removeRecipe, editRecipe } = useContext(RecipeContext);
+  const { removeRecipe, editRecipe } = useContext(PortfolioContext);
   const [date, setDate] = useState(recipe.date)
   const [edit, setEdit] = useState(false);
   const [description, setDescription] = useState(recipe.description);

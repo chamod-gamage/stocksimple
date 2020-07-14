@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
-import { RecipeContext } from "../contexts/RecipeContext";
+import { PortfolioContext } from "../contexts/PortfolioContext";
 
 const Header = () => {
-  const { recipes } = useContext(RecipeContext);
+  const { recipes } = useContext(PortfolioContext);
   return (
     <div className="container mt-5">
       <div className="row">
