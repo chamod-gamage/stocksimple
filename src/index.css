@@ -2,6 +2,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500&family=Merriweather:wght@700&display=swap");
 /* @import url("bootstrap/dist/css/bootstrap.min.css"); */
+
 .html {
   text-align: center;
   font-size: 20px;
@@ -32,7 +33,7 @@ body {
   font-size: 16px;
   line-height: 150%;
   color: #14132c;
-  background-color: #f4f6f8 !important;
+  background-color: black !important;
   min-height: 100%;
 }
 

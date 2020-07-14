@@ -4,10 +4,10 @@ import { PortfolioContext } from "../contexts/PortfolioContext";
 const Header = () => {
 
   const { stocks } = useContext(PortfolioContext);
-  const val = stocks.reduce(function(prev, cur) {
+  const val = stocks?.reduce(function(prev, cur) {
     return prev + cur.value*cur.shares;
   }, 0);
-  const prices = stocks.reduce(function(prev, cur) {
+  const prices = stocks?.reduce(function(prev, cur) {
     return prev + cur.price*cur.shares;
   }, 0);
   return (
