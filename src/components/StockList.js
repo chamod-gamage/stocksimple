@@ -15,12 +15,6 @@ const StockList = (props) => {
 
       <StockForm button={"Add Holding"} />  
       <div style = {{height: 10}}/>
-      {console.log(stocks)}
-      <ul style = {{padding:0}}>
-        {stocks?.map((stock, index) => {
-          return <div style = {{paddingTop: 10, paddingBottom: 10}}>{console.log(index)}<StockDetails stock = {stock} index={index} /></div>;
-        })}
-      </ul>
       <button
             onClick={e => {
               fetchStocks()
@@ -33,6 +27,14 @@ const StockList = (props) => {
               <div style={{ margin: "auto 0" }} />
             </div>
           </button>
+      
+      {console.log(stocks)}
+      <ul style = {{padding:0}}>
+        {stocks?.map((stock, index) => {
+          return <div style = {{paddingTop: 10, paddingBottom: 10}}>{console.log(index)}<StockDetails stock = {stock} index={index} /></div>;
+        })}
+      </ul>
+      
     </div>
   );
 };
