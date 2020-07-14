@@ -11,7 +11,7 @@ const StockList = (props) => {
       {console.log(stocks)}
       <ul style = {{padding:0}}>
         {stocks?.map((stock) => {
-          return <div style = {{paddingTop: 10, paddingBottom: 10}}><StockDetails stock={stock} key={stock.id} /></div>;
+          return <div style = {{paddingTop: 10, paddingBottom: 10}}><StockDetails stock={stock} key={stock?.id} /></div>;
         })}
       </ul>
     </div>
