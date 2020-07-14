@@ -117,6 +117,7 @@ const StockForm = props => {
         addStock(stock, data?.quotes?.quote?.description, date, price, shares, data?.quotes?.quote?.last);
         setDate("");
         setCompany("");
+        setPrice();
         setCost(0);
         setStock("");
         setShares(1);

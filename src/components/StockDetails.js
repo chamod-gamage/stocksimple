@@ -71,6 +71,25 @@ const StockDetails = ({ stock }) => {
           
         </div>
       </div>
+      <div
+        style={{ margin: "auto", textAlign: "center" }}
+        className="row m-3 align-items-center center"
+      >
+        <div className="col-12 align-self-center">
+          <button
+            onClick={e => {
+              removeStock(stock.id)
+            }}
+            className="btn btn-primary"
+          >
+            {" "}
+            <h2> Delete Holding </h2>
+            <div className="row" style={{ justifyContent: "center" }}>
+              <div style={{ margin: "auto 0" }} />
+            </div>
+          </button>
+        </div>
+      </div>
       </AppProvider>
     </div>
   );
