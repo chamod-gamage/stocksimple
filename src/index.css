@@ -137,7 +137,7 @@ input[type="date"]:focus {
   border-radius: 10px;
 }
 
-.btn:hover {
+/* .btn:hover {
   border: 3px solid #084643;
   opacity: 90%;
-}
+} */
