@@ -7,6 +7,7 @@ import "./index.css";
 import PortfolioContextProvider from "./contexts/PortfolioContext";
 import StockForm from "./components/StockForm";
 import ReactGA from "react-ga";
+import Footer from "./components/Footer";
 function App() {
   useEffect(() => {
     ReactGA.initialize('UA-170137058-3');
@@ -21,7 +22,7 @@ function App() {
           
 
           <StockList />
-          
+          <Footer/>
         </PortfolioContextProvider>
       </div>
     

@@ -113,6 +113,20 @@ input[type="date"]:focus {
   outline: none;
 }
 
+.h0 {
+  
+  font-family: Raleway;
+  font-weight: bold;
+  font-size: 40;
+  color: white;
+  text-align: center;
+  justify-content: center;
+  z-index: 0;
+}
+  .h0:hover {
+    color: #084643;
+  }
+
 .form {
   background-color: #363636;
   border: 3px solid #084643;
