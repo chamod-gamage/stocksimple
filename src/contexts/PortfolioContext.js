@@ -16,7 +16,7 @@ const PortfolioContextProvider = props => {
 
   useEffect(() => {
     fetchStocks()
-  }, []);
+  },[]);
 
   useEffect(() => {
     fetchStocks()
@@ -27,23 +27,20 @@ const PortfolioContextProvider = props => {
     headers: {
       Accept: "application/json",
       Authorization: "Bearer ugQFa1vAGcLGq4LXMnBCN7VY5frW"
-      // "Access-Control-Allow-Headers": "*"
     }
   };
 
   const fetchStocks = () => {
+    console.log("UPDATE")
     if(stocks?.length>0){
       let newStocks = [...stocks];
       for(let i = 0; i< stocks?.length; i++) {
         fetch(`https://sandbox.tradier.com/v1/markets/quotes?symbols=${stocks[i].symbol}`, get)
           .then(function(response) {
-            // The response is a Response instance.
-            // You parse the data into a useable format using `.json()`
             return response.json();
           })
           .then(function(data) {
             console.log(data)
-            // `data` is the parsed version of the JSON returned from the above endpoint.
             newStocks[i].description = stocks[i].description;
             newStocks[i].date = stocks[i].date;
             newStocks[i].id = stocks[i].id;
@@ -62,11 +59,6 @@ const PortfolioContextProvider = props => {
     }
   };
 
-
-  //hello can you stop changing the names i cant see what im doing... this should be last
-  //we need to still make the lsit show up
-  //cant do any of the front end stuff when its like this go ahead lol i just made it match so it doesnt crash
-  // its not working it keep sl
   const addStock = (symbol, description, date, price, shares, value) => {
     if (!stocks) {
       setStocks([
