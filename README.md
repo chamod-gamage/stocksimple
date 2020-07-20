@@ -1,9 +1,8 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Stocksimple
 
-## Home Cooking
+Stocksimple is a web app built for personal use but free for anyone to use at https://stocksimple.netlify.app in order to keep track of your stock portfolio in a hassle-free manner.
+The codebase for this web app is React.js with your data stored long-term using your browser's localStorage!
 
-Home Cooking is a web app that's free for anyone to use at https://home-cooking.netlify.app in order to store your recipes in a logbook.
-Your data is stored long-term using your browser's localStorage!
 
 To see the code in action on your local development server:
 1. Clone the repo
@@ -12,3 +11,4 @@ To see the code in action on your local development server:
 
 Have fun!
 
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
