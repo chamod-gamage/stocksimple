@@ -6,10 +6,17 @@ import StockForm from "./StockForm"
 import Header from "./Header"
 
 const StockList = (props) => {
-  const [trigger, setTrigger] = useState(0)
-  const { stocks, setUpdate, fetchStocks } = useContext(PortfolioContext);
-  useEffect(() => {fetchStocks(); setTrigger(0)}, [])
-  return (
+  const [trigger, setTrigger] = useState(false)
+  const { stocks, setUpdate, fetchStocks , setStocks} = useContext(PortfolioContext);
+  useEffect(() => { 
+    // console.log(JSON.parse(localStorage.getItem("stocks")));
+    // setStocks(JSON.parse(localStorage.getItem("stocks"))); 
+    fetchStocks(); 
+    // console.log('hi'); 
+    setTrigger(true)}
+  , [])
+  return ( 
+    !trigger ? <div/> :
     <div style = {{width: "100%"}}>
       <Header />
 
@@ -28,7 +35,7 @@ const StockList = (props) => {
             </div>
           </button>
       
-      {console.log(stocks)}
+      {/* {console.log(stocks)} */}
       <ul style = {{padding:0}}>
         {stocks?.map((stock, index) => {
           return <div style = {{paddingTop: 10, paddingBottom: 10}}>{console.log(index)}<StockDetails stock = {stock} index={index} /></div>;
