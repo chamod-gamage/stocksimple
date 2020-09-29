@@ -40,9 +40,9 @@ const StockDetails = (props) => {
   return (
     <div className="form"  >
       <AppProvider>
-        {console.log(props)}
+        {/* {console.log(props)}
         {console.log(stocks)}
-        {console.log(props.index)}
+        {console.log(props.index)} */}
         <div className="row m-3">
         <div className="col-6">
           <div style={{ float: "left", paddingTop: 10, paddingBottom: 10 }}>
