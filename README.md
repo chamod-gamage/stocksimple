@@ -1,7 +1,8 @@
 ## Stocksimple 📈
 
 Stocksimple is a web app built for personal use but free for anyone to use at https://stocksimple.netlify.app in order to keep track of your stock portfolio in a hassle-free manner.
-The codebase for this web app is React.js with your data stored long-term using your browser's localStorage!
+The framework used for this web app is React.js with your data stored long-term using your browser's localStorage!
+The Tradier Developer API was used to source real-time and historical market data.
 
 
 To see the code in action on your local development server:
