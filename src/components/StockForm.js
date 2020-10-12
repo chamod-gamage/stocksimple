@@ -30,7 +30,7 @@ const StockForm = props => {
   const [click, setClick] = useState(0)
 
   useEffect(() => {
-    // console.log(date)
+    console.log(date)
     getHistorical({
       stock: stock,
       interval: "daily",
@@ -85,7 +85,7 @@ const StockForm = props => {
       })
       .then(function(data) {
         // `data` is the parsed version of the JSON returned from the above endpoint.
-        // console.log(data);
+        console.log(data);
         if (query.start === query.end) {
           setPrice((data?.history?.day?.high + data?.history?.day?.low) / 2);
           setCost(
@@ -111,7 +111,7 @@ const StockForm = props => {
       })
       .then(function(data) {
         // `data` is the parsed version of the JSON returned from the above endpoint.
-        // console.log(data);
+        console.log(data);
         setValue(data?.quotes?.quote?.last);
         setDescription(data?.quotes?.quote?.description)
         addStock(stock, data?.quotes?.quote?.description, date, price, shares, data?.quotes?.quote?.last);
@@ -207,7 +207,7 @@ const StockForm = props => {
                 setTrigger(false)
                 e.preventDefault();
                 searchStock(query);
-                // console.log(options);
+                console.log(options);
               }
             }}
             onChange={e => {
