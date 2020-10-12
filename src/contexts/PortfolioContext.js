@@ -14,13 +14,13 @@ const PortfolioContextProvider = props => {
     localStorage.setItem("stocks", JSON.stringify(stocks));
   }, [stocks]);
 
-  useEffect(() => {
-    fetchStocks()
-  },[]);
+  // useEffect(() => {
+  //   fetchStocks()
+  // },[]);
 
-  useEffect(() => {
-    fetchStocks()
-  }, [update]);
+  // useEffect(() => {
+  //   fetchStocks()
+  // }, [update]);
 
   const get = {
     method: "GET",
@@ -31,22 +31,25 @@ const PortfolioContextProvider = props => {
   };
 
   const fetchStocks = () => {
-    console.log("UPDATE")
     if(stocks?.length>0){
       let newStocks = [...stocks];
       for(let i = 0; i< stocks?.length; i++) {
         fetch(`https://sandbox.tradier.com/v1/markets/quotes?symbols=${stocks[i].symbol}`, get)
           .then(function(response) {
+            // console.log(response)
             return response.json();
+            
           })
           .then(function(data) {
-            console.log(data)
+            // console.log(data)
             newStocks[i].description = stocks[i].description;
             newStocks[i].date = stocks[i].date;
             newStocks[i].id = stocks[i].id;
             newStocks[i].price = stocks[i].price;
             newStocks[i].symbol = stocks[i].symbol;
             newStocks[i].value = data?.quotes?.quote?.last
+            setStocks(newStocks)
+            // console.log(stocks)
 
           })
           .catch(err => {
@@ -54,8 +57,7 @@ const PortfolioContextProvider = props => {
           });
         
       }
-      setStocks(newStocks)
-      console.log(stocks)
+      
     }
   };
 
@@ -76,7 +78,7 @@ const PortfolioContextProvider = props => {
         ["asc"]
       )
     );
-    console.log(stocks);
+    // console.log(stocks);
   };
 
   const removeStock = id => {
@@ -99,7 +101,7 @@ const PortfolioContextProvider = props => {
   // };
 
   return (
-    <PortfolioContext.Provider value={{ stocks, addStock, removeStock, setUpdate, fetchStocks }}>
+    <PortfolioContext.Provider value={{ stocks, addStock, removeStock, setUpdate, fetchStocks, setStocks }}>
       {props.children}
     </PortfolioContext.Provider>
   );
