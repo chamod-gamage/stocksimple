@@ -1,10 +1,8 @@
 import React, { useEffect } from 'react';
-import Header from './components/Header';
 import StockList from './components/StockList';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@shopify/polaris/styles.css';
 import PortfolioContextProvider from './contexts/PortfolioContext';
-import StockForm from './components/StockForm';
 import ReactGA from 'react-ga';
 import Footer from './components/Footer';
 import './index.scss';

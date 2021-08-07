@@ -1,17 +1,9 @@
-import React, {
-  useState,
-  useContext,
-  Fragment,
-  useCallback,
-  useEffect,
-} from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { PortfolioContext } from '../contexts/PortfolioContext';
 import { Select } from '@shopify/polaris';
 import CurrencyInput from 'react-currency-input-field';
-import { Autocomplete, Icon, TextField, AppProvider } from '@shopify/polaris';
-import { SearchMinor } from '@shopify/polaris-icons';
+import { TextField, AppProvider } from '@shopify/polaris';
 import moment from 'moment';
-import SearchIcon from '@material-ui/icons/Search';
 
 const StockForm = (props) => {
   const { addStock } = useContext(PortfolioContext);
