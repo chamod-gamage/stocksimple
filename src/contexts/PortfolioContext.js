@@ -1,22 +1,22 @@
-import React, { createContext, useState, useEffect } from "react";
-import { v4 as uuidv4 } from "uuid";
-import _ from "lodash";
+import React, { createContext, useState, useEffect } from 'react';
+import { v4 as uuidv4 } from 'uuid';
+import _ from 'lodash';
 export const PortfolioContext = createContext();
 
 const PortfolioContextProvider = (props) => {
   const [stocks, setStocks] = useState(
-    JSON.parse(localStorage.getItem("stocks")),
+    JSON.parse(localStorage.getItem('stocks')),
     []
   );
 
   useEffect(() => {
-    localStorage.setItem("stocks", JSON.stringify(stocks));
+    localStorage.setItem('stocks', JSON.stringify(stocks));
   }, [stocks]);
 
   const get = {
-    method: "GET",
+    method: 'GET',
     headers: {
-      Accept: "application/json",
+      Accept: 'application/json',
       Authorization: process.env.REACT_APP_TRADIER_API_TOKEN,
     },
   };
@@ -30,11 +30,9 @@ const PortfolioContextProvider = (props) => {
           get
         )
           .then(function (response) {
-            // console.log(response)
             return response.json();
           })
           .then(function (data) {
-            // console.log(data)
             newStocks[i].description = stocks[i].description;
             newStocks[i].date = stocks[i].date;
             newStocks[i].id = stocks[i].id;
@@ -42,10 +40,6 @@ const PortfolioContextProvider = (props) => {
             newStocks[i].symbol = stocks[i].symbol;
             newStocks[i].value = data?.quotes?.quote?.last;
             setStocks(newStocks);
-            // console.log(stocks)
-          })
-          .catch((err) => {
-            console.log(err);
           });
       }
     }
@@ -64,11 +58,10 @@ const PortfolioContextProvider = (props) => {
           ...stocks,
           { symbol, description, date, price, shares, value, id: uuidv4() },
         ],
-        ["symbol"],
-        ["asc"]
+        ['symbol'],
+        ['asc']
       )
     );
-    // console.log(stocks);
   };
 
   const removeStock = (id) => {

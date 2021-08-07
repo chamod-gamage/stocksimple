@@ -4,59 +4,32 @@ import React, {
   Fragment,
   useCallback,
   useEffect,
-} from "react";
-import { PortfolioContext } from "../contexts/PortfolioContext";
-import { Select } from "@shopify/polaris";
-import CurrencyInput from "react-currency-input-field";
-import { Autocomplete, Icon, TextField, AppProvider } from "@shopify/polaris";
-import { SearchMinor } from "@shopify/polaris-icons";
-import moment from "moment";
-import SearchIcon from "@material-ui/icons/Search";
+} from 'react';
+import { PortfolioContext } from '../contexts/PortfolioContext';
+import { Select } from '@shopify/polaris';
+import CurrencyInput from 'react-currency-input-field';
+import { Autocomplete, Icon, TextField, AppProvider } from '@shopify/polaris';
+import { SearchMinor } from '@shopify/polaris-icons';
+import moment from 'moment';
+import SearchIcon from '@material-ui/icons/Search';
 
 const StockForm = (props) => {
   const { addStock } = useContext(PortfolioContext);
   const [options, setOptions] = useState([]);
-  const [description, setDescription] = useState();
-  const [query, setQuery] = useState("");
-  const [date, setDate] = useState("");
-  const [cost, setCost] = useState(0);
+  const [query, setQuery] = useState('');
+  const [date, setDate] = useState('');
   const [price, setPrice] = useState(0);
-  const [company, setCompany] = useState("");
-  const [stock, setStock] = useState("");
+  const [stock, setStock] = useState('');
   const [shares, setShares] = useState(0);
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(0);
   const [trigger, setTrigger] = useState(false);
   const [click, setClick] = useState(0);
-
-  useEffect(() => {
-    // console.log(date)
-    getHistorical({
-      stock: stock,
-      interval: "daily",
-      start: date,
-      end: date,
-      shares: shares,
-    });
-  }, [date, stock]);
-
-  useEffect(() => {
-    fetchStocks(stock);
-  }, [click]);
-
-  const handleSubmit = (e) => {
-    e.preventDefault(); //prevents page from being refreshed
-  };
-
-  const handleButton = (e) => {
-    e.preventDefault(); //prevents page from being refreshed
-  };
+  const [error, setError] = useState('');
 
   const get = {
-    method: "GET",
+    method: 'GET',
     headers: {
-      Accept: "application/json",
-      Authorization: "Bearer ugQFa1vAGcLGq4LXMnBCN7VY5frW",
+      Accept: 'application/json',
+      Authorization: 'Bearer ugQFa1vAGcLGq4LXMnBCN7VY5frW',
     },
   };
 
@@ -71,11 +44,6 @@ const StockForm = (props) => {
       .then(function (data) {
         if (query.start === query.end) {
           setPrice((data?.history?.day?.high + data?.history?.day?.low) / 2);
-          setCost(
-            (query.shares *
-              (data?.history?.day?.high + data?.history?.day?.low)) /
-              2
-          );
         }
       })
       .catch((err) => {
@@ -89,8 +57,6 @@ const StockForm = (props) => {
         return response.json();
       })
       .then(function (data) {
-        setValue(data?.quotes?.quote?.last);
-        setDescription(data?.quotes?.quote?.description);
         addStock(
           stock,
           data?.quotes?.quote?.description,
@@ -99,15 +65,13 @@ const StockForm = (props) => {
           shares,
           data?.quotes?.quote?.last
         );
-        setDate("");
-        setCompany("");
+        setDate('');
         setPrice(0);
-        setCost(0);
-        setStock("");
+        setStock('');
         setShares(0);
       })
       .catch((err) => {
-        console.log(err);
+        setError(JSON.stringify(err));
       });
   };
 
@@ -117,8 +81,6 @@ const StockForm = (props) => {
         return response.json();
       })
       .then(function (data) {
-        console.log(data);
-
         data.securities.security.length > 1
           ? setOptions(
               data?.securities?.security?.map((item) => ({
@@ -132,20 +94,42 @@ const StockForm = (props) => {
                 label: `${data?.securities?.security?.symbol} - ${data?.securities?.security?.description}`,
               },
             ]);
-
-        // console.log(options)
-        // console.log(data?.securities?.security?.map(item => ({value: item.symbol, label: `${item.symbol} - ${item.description}`})))
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
+  useEffect(() => {
+    if (date?.length > 0 && stock?.length > 0) {
+      getHistorical({
+        stock: stock,
+        interval: 'daily',
+        start: date,
+        end: date,
+        shares: shares,
+      });
+    }
+  }, [date, stock]);
+
+  useEffect(() => {
+    fetchStocks(stock);
+  }, [click]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault(); //prevents page from being refreshed
+  };
+
+  const handleButton = (e) => {
+    e.preventDefault(); //prevents page from being refreshed
+    setClick(click + 1);
+  };
+
   const SectionHead = (label) => {
     return (
       <div className="row">
         <div className="col-12">
-          <div style={{ float: "left", paddingTop: 10, paddingBottom: 10 }}>
+          <div className="section-head">
             <h2>{label}</h2>
           </div>
         </div>
@@ -162,7 +146,7 @@ const StockForm = (props) => {
     >
       <div className="row m-3">
         <div className="col-6">
-          {SectionHead("Symbol")}
+          {SectionHead('Symbol')}
 
           <textarea
             prefix="s"
@@ -170,53 +154,48 @@ const StockForm = (props) => {
             name="textarea"
             rows="1"
             cols="5"
-            placeholder={"Search for stocks (press enter)..."}
+            placeholder={'Search for stocks (press enter)...'}
             value={query}
             onKeyDown={(e) => {
               if (e.keyCode === 13) {
                 setTrigger(false);
                 e.preventDefault();
                 searchStock(query);
-                // console.log(options);
               }
             }}
             onChange={(e) => {
               setTrigger(true);
+              setStock('');
               setQuery(e.target.value);
-              // searchStock(query);
             }}
           />
           <AppProvider>
             <Select
               placeholder={
                 trigger
-                  ? "Press enter to complete search"
+                  ? 'Press enter to complete search'
+                  : error?.length > 0 && error !== '{}'
+                  ? error
                   : options.length === 0
-                  ? "Enter search parameter"
-                  : "Select stocks from here"
+                  ? 'Enter search parameter'
+                  : 'Select stocks from here'
               }
               options={options}
-              onChange={(selected) => setStock(selected)}
+              onChange={setStock}
               value={stock}
             />
           </AppProvider>
         </div>
 
         <div className="col-6">
-          {SectionHead("Shares")}
+          {SectionHead('Shares')}
           <AppProvider>
             <TextField
               type="number"
               value={shares}
-              // onKeyDown={e => {
-              //   if (e.keyCode === 13) {
-              //     e.preventDefault();
-              //   }
-              // }}
               required
               onChange={(value) => {
                 setShares(value);
-                setCost(value * price);
               }}
             />
           </AppProvider>
@@ -224,24 +203,24 @@ const StockForm = (props) => {
       </div>
       <div className="row m-3">
         <div className="col-6">
-          {SectionHead("Date")}
+          {SectionHead('Date')}
           <input
             type="date"
             placeholder="date"
             value={date}
             onChange={(e) => {
-              e.target.value <= moment().format("YYYY-MM-DD") &&
+              e.target.value <= moment().format('YYYY-MM-DD') &&
                 setDate(e.target.value);
             }}
             required
           />
         </div>
         <div className="col-6">
-          {SectionHead("Share Price")}
+          {SectionHead('Share Price')}
 
           <CurrencyInput
             value={price}
-            style={{ height: 50, borderRadius: 7, width: "100%" }}
+            className="currency-input"
             placeholder="$"
             defaultValue={0}
             allowDecimals={true}
@@ -249,30 +228,20 @@ const StockForm = (props) => {
             prefix="$"
             onChange={(value) => {
               setPrice(value);
-              setCost(value * shares);
             }}
             required
           />
         </div>
       </div>
-      <div
-        style={{ margin: "auto", textAlign: "center" }}
-        className="row m-3 align-items-center center"
-      >
+      <div className="row m-3 align-items-center center">
         <div className="col-12 align-self-center">
           <button
-            onClick={(e) => {
-              setClick(click + 1);
-              handleButton(e);
-            }}
+            onClick={handleButton}
             className="btn btn-primary"
             disabled={!(stock && date && shares > 0 && price > 0)}
           >
-            {" "}
-            <h2> {props.button} </h2>
-            <div className="row" style={{ justifyContent: "center" }}>
-              <div style={{ margin: "auto 0" }} />
-            </div>
+            {' '}
+            <h2> {props.buttonText} </h2>
           </button>
         </div>
       </div>

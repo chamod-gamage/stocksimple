@@ -1,9 +1,8 @@
-import React, { useContext, useState, useEffect } from "react";
-import "../index.css";
-import { PortfolioContext } from "../contexts/PortfolioContext";
-import StockDetails from "./StockDetails";
-import StockForm from "./StockForm";
-import Header from "./Header";
+import React, { useContext, useState, useEffect } from 'react';
+import { PortfolioContext } from '../contexts/PortfolioContext';
+import StockDetails from './StockDetails';
+import StockForm from './StockForm';
+import Header from './Header';
 
 const StockList = (props) => {
   const [trigger, setTrigger] = useState(false);
@@ -17,33 +16,21 @@ const StockList = (props) => {
   return !trigger ? (
     <div />
   ) : (
-    <div style={{ width: "100%" }}>
+    <div>
       <Header />
-
-      <StockForm button={"Add Holding"} />
-      <div style={{ height: 10 }} />
+      <StockForm buttonText={'Add Holding'} />
       <button
         onClick={(e) => {
           fetchStocks();
         }}
         className="btn btn-primary"
       >
-        {" "}
         <h2> UPDATE </h2>
-        <div className="row" style={{ justifyContent: "center" }}>
-          <div style={{ margin: "auto 0" }} />
-        </div>
       </button>
-
-      <ul style={{ padding: 0 }}>
-        {stocks?.map((stock, index) => {
-          return (
-            <div style={{ paddingTop: 10, paddingBottom: 10 }}>
-              {console.log(index)}
-              <StockDetails stock={stock} index={index} />
-            </div>
-          );
-        })}
+      <ul>
+        {stocks?.map((stock, index) => (
+          <StockDetails stock={stock} index={index} />
+        ))}
       </ul>
     </div>
   );
