@@ -18,7 +18,8 @@ export const isAuthorized = (req, res, next) => {
 };
 
 export const generateToken = (res, _id, username) => {
-  const expiration = process.env.NODE_ENV !== 'production' ? 10000 : 604800000;
+  const expiration =
+    process.env.NODE_ENV !== 'production' ? 10000000 : 604800000;
   const token = jwt.sign({ _id, username }, process.env.JWT_SECRET, {
     expiresIn: process.env.NODE_ENV !== 'production' ? '1d' : '7d',
   });

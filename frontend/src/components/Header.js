@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { PortfolioContext } from '../contexts/PortfolioContext';
 
-const Header = () => {
+const Header = ({ unauthorized = false }) => {
   const { stocks } = useContext(PortfolioContext);
   const val = stocks?.reduce(function (prev, cur) {
     return prev + cur?.value * cur?.shares;
@@ -16,7 +16,7 @@ const Header = () => {
           <div className="col">
             <h1>📈</h1>
             <br />
-            {stocks?.length > 0 ? (
+            {stocks?.length > 0 && !unauthorized ? (
               <h1>
                 {' '}
                 Your current balance is ${val.toFixed(2)} USD (

@@ -25,6 +25,7 @@ const corsOptions = {
     'https://compassionate-borg-d2ff90.netlify.app',
     'https://stocksimple.netlify.app',
   ],
+  credentials: true,
 };
 
 app.use(express.json());
