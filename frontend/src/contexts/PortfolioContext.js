@@ -109,6 +109,7 @@ const PortfolioContextProvider = (props) => {
         removeStock,
         fetchStocks,
         setStocks,
+        getPortfolio,
       }}
     >
       {props.children}

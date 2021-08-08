@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { SectionHead } from './SectionHead';
 import Header from './Header';
+import { PortfolioContext } from '../../../src/contexts/PortfolioContext';
 const AuthForm = ({ setAuthorized }) => {
   const [login, setLogin] = useState(true);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const { getPortfolio } = useContext(PortfolioContext);
 
   const handleSubmit = async () => {
     fetch(
@@ -36,6 +38,7 @@ const AuthForm = ({ setAuthorized }) => {
       .then((data) => {
         if (data.username) {
           setAuthorized(true);
+          getPortfolio();
         }
       })
       .catch((err) => {
