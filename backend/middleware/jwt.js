@@ -28,5 +28,6 @@ export const generateToken = (res, _id, username) => {
     secure: process.env.NODE_ENV === 'production',
     httpOnly: true,
     sameSite: 'none',
+    secure: true,
   });
 };
