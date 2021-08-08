@@ -38,4 +38,34 @@ app.post('/', async (req, res) => {
   }
 });
 
+app.post('/login', async (req, res) => {
+  try {
+    const user = await UserModel.findOne({ username: req.body.username });
+    if (!user) {
+      res.status(404).send({ message: 'Invalid credentials' });
+      return;
+    }
+    user.comparePassword(req.body.password, async (err, isMatch) => {
+      if (err || !isMatch) {
+        res.status(404).send({ message: 'Invalid Credentials' });
+      } else {
+        await generateToken(res, user._doc._id, user._doc.username);
+        const { password, ...rest } = user._doc;
+        res.send(rest);
+      }
+    });
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+app.post('/logout', async (req, res) => {
+  try {
+    res.clearCookie('token');
+    res.send();
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
 export default app;

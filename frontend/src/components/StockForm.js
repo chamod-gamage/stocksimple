@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
+import { SectionHead } from './SectionHead';
 import { PortfolioContext } from '../contexts/PortfolioContext';
 import { Select } from '@shopify/polaris';
 import CurrencyInput from 'react-currency-input-field';
@@ -21,7 +22,7 @@ const StockForm = (props) => {
     method: 'GET',
     headers: {
       Accept: 'application/json',
-      Authorization: 'Bearer ugQFa1vAGcLGq4LXMnBCN7VY5frW',
+      Authorization: `${process.env.REACT_APP_TRADIER_API_TOKEN}`,
     },
   };
 
@@ -115,18 +116,6 @@ const StockForm = (props) => {
   const handleButton = (e) => {
     e.preventDefault(); //prevents page from being refreshed
     setClick(click + 1);
-  };
-
-  const SectionHead = (label) => {
-    return (
-      <div className="row">
-        <div className="col-12">
-          <div className="section-head">
-            <h2>{label}</h2>
-          </div>
-        </div>
-      </div>
-    );
   };
 
   return (

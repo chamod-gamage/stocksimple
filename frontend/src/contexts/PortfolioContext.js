@@ -11,9 +11,10 @@ const PortfolioContextProvider = (props) => {
 
   useEffect(() => {
     localStorage.setItem('stocks', JSON.stringify(stocks));
+    postPortfolio();
   }, [stocks]);
 
-  const get = {
+  const getTradier = {
     method: 'GET',
     headers: {
       Accept: 'application/json',
@@ -21,13 +22,30 @@ const PortfolioContextProvider = (props) => {
     },
   };
 
+  const postPortfolio = () => {
+    console.log(JSON.stringify(stocks));
+    if (stocks?.length > 0) {
+      fetch(`${process.env.REACT_APP_STOCKSIMPLE_API}/portfolio`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify(stocks),
+      })
+        .then((res) => res.json())
+        .then((data) => console.log(data));
+    }
+  };
+
   const fetchStocks = () => {
     if (stocks?.length > 0) {
       let newStocks = [...stocks];
       for (let i = 0; i < stocks?.length; i++) {
         fetch(
-          `https://sandbox.tradier.com/v1/markets/quotes?symbols=${stocks[i].symbol}`,
-          get
+          `${process.env.REACT_APP_TRADIER_API}/markets/quotes?symbols=${stocks[i].symbol}`,
+          getTradier
         )
           .then(function (response) {
             return response.json();
