@@ -4,15 +4,16 @@ import _ from 'lodash';
 export const PortfolioContext = createContext();
 
 const PortfolioContextProvider = (props) => {
-  const [stocks, setStocks] = useState(
-    JSON.parse(localStorage.getItem('stocks')),
-    []
-  );
+  const [stocks, setStocks] = useState([]);
 
   useEffect(() => {
     localStorage.setItem('stocks', JSON.stringify(stocks));
     postPortfolio();
   }, [stocks]);
+
+  useEffect(() => {
+    getPortfolio();
+  }, []);
 
   const getTradier = {
     method: 'GET',
@@ -22,8 +23,21 @@ const PortfolioContextProvider = (props) => {
     },
   };
 
-  const postPortfolio = () => {
-    console.log(JSON.stringify(stocks));
+  const getPortfolio = async () => {
+    return await fetch(`${process.env.REACT_APP_STOCKSIMPLE_API}/portfolio`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+      },
+      credentials: 'include',
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        fetchStocks(data.holdings);
+      });
+  };
+
+  const postPortfolio = async () => {
     if (stocks?.length > 0) {
       fetch(`${process.env.REACT_APP_STOCKSIMPLE_API}/portfolio`, {
         method: 'POST',
@@ -35,27 +49,28 @@ const PortfolioContextProvider = (props) => {
         body: JSON.stringify(stocks),
       })
         .then((res) => res.json())
-        .then((data) => console.log(data));
+        .then(() => {});
     }
   };
 
-  const fetchStocks = () => {
-    if (stocks?.length > 0) {
-      let newStocks = [...stocks];
-      for (let i = 0; i < stocks?.length; i++) {
+  const fetchStocks = (stockList) => {
+    const stockArray = stockList ? stockList : stocks;
+    if (stockArray?.length > 0) {
+      let newStocks = [...stockArray];
+      for (let i = 0; i < stockArray?.length; i++) {
         fetch(
-          `${process.env.REACT_APP_TRADIER_API}/markets/quotes?symbols=${stocks[i].symbol}`,
+          `${process.env.REACT_APP_TRADIER_API}/markets/quotes?symbols=${stockArray[i].symbol}`,
           getTradier
         )
           .then(function (response) {
             return response.json();
           })
           .then(function (data) {
-            newStocks[i].description = stocks[i].description;
-            newStocks[i].date = stocks[i].date;
-            newStocks[i].id = stocks[i].id;
-            newStocks[i].price = stocks[i].price;
-            newStocks[i].symbol = stocks[i].symbol;
+            newStocks[i].description = stockArray[i].description;
+            newStocks[i].date = stockArray[i].date;
+            newStocks[i].id = stockArray[i].id;
+            newStocks[i].price = stockArray[i].price;
+            newStocks[i].symbol = stockArray[i].symbol;
             newStocks[i].value = data?.quotes?.quote?.last;
             setStocks(newStocks);
           });

@@ -37,7 +37,6 @@ const AuthForm = ({ setAuthorized }) => {
         if (data.username) {
           setAuthorized(true);
         }
-        console.log(data);
       })
       .catch((err) => {
         console.log(err);
