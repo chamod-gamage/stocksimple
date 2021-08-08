@@ -7,7 +7,8 @@
   "extension": "js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "start": "NODE_ENV=production node build/src/index.js"
   },
   "author": "Chamod Gamage",
   "license": "ISC",
