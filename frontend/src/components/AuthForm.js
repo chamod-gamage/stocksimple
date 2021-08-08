@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { SectionHead } from './SectionHead';
 import Header from './Header';
-import { PortfolioContext } from '../../contexts/PortfolioContext';
+import { PortfolioContext } from '../contexts/PortfolioContext';
 const AuthForm = ({ setAuthorized }) => {
   const [login, setLogin] = useState(true);
   const [username, setUsername] = useState('');
