@@ -27,5 +27,6 @@ export const generateToken = (res, _id, username) => {
     expires: new Date(Date.now() + expiration),
     secure: process.env.NODE_ENV === 'production',
     httpOnly: true,
+    sameSite: 'none',
   });
 };
