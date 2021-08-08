@@ -1,30 +1,40 @@
 import express from 'express';
+import { generateToken, isAuthorized } from '../middleware/jwt.js';
 import UserModel from '../models/user.js';
 
 const app = express();
 
-app.get('/', async (request, response) => {
+app.get('/', isAuthorized, async (req, res) => {
   const users = await UserModel.find({});
 
   try {
-    response.send(users);
+    res.send(users);
   } catch (error) {
-    response.status(500).send(error);
+    res.status(500).send(error);
   }
 });
 
-app.post('/', async (request, response) => {
-  const user = new UserModel(request.body);
+app.get('/authorized', isAuthorized, async (req, res) => {
+  try {
+    res.send({ authorized: true, ...req.user });
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+app.post('/', async (req, res) => {
+  const user = new UserModel(req.body);
   try {
     if (await UserModel.findOne({ username: user.username })) {
-      response.status(409).send({ message: 'Username Already Exists' });
+      res.status(409).send({ message: 'Username Already Exists' });
       return;
     }
     await user.save();
+    await generateToken(res, user._doc._id, user._doc.username);
     const { password, ...rest } = user._doc;
-    response.send(rest);
+    res.send(rest);
   } catch (error) {
-    response.status(500).send(error);
+    res.status(500).send(error);
   }
 });
 
