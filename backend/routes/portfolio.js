@@ -4,15 +4,14 @@ import PortfolioModel from '../models/portfolio.js';
 const app = express();
 
 app.post('/', isAuthorized, async (req, res) => {
-  const user_id = req.user._id ? req.user._id : req.body.user;
   const portfolio = new PortfolioModel({
-    user_id,
-    holdings: req.body.stocks,
+    user_id: req.user._id,
+    holdings: req.body,
   });
   try {
     const updatedPortfolio = await PortfolioModel.findOneAndUpdate(
-      { user_id },
-      { user_id, holdings: req.body.stocks },
+      { user_id: req.user._id },
+      { user_id: req.user._id, holdings: req.body },
       { new: true, upsert: true }
     );
     res.send(updatedPortfolio);
@@ -21,11 +20,9 @@ app.post('/', isAuthorized, async (req, res) => {
   }
 });
 
-//switched to post so user id is secure
-app.post('/fetch', isAuthorized, async (req, res) => {
-  const user_id = req.user._id ? req.user._id : req.query.user_id;
+app.get('/', isAuthorized, async (req, res) => {
   try {
-    const portfolio = await PortfolioModel.findOne({ user_id });
+    const portfolio = await PortfolioModel.findOne({ user_id: req.user._id });
     res.send(portfolio);
   } catch (error) {
     res.status(500).send(error);

@@ -60,9 +60,7 @@
   .input-row {
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
-    flex-wrap: wrap;
-    align-self: center;
+    justify-content: space-between;
     .input-block {
       margin: 5px;
     }
@@ -88,13 +86,6 @@
 
 .login-btn {
   padding: 5px 10px;
-}
-
-.logout {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  margin-bottom: -60px;
 }
 
 .left {
