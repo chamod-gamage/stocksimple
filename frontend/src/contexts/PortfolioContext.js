@@ -35,7 +35,14 @@ const PortfolioContextProvider = ({ user, setUser, children }) => {
         body: JSON.stringify({ user_id: user }),
       }
     )
-      .then((res) => res.json())
+      .then((res) => {
+        if (res.status === 401) {
+          window.alert(
+            'Please enable 3rd party cookies to use this app. This is likely disabled on Incognito/Private mode.'
+          );
+        }
+        return res.json();
+      })
       .then((data) => {
         fetchStocks(data.holdings);
       });
