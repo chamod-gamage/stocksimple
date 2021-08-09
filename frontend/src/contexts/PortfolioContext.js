@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import _ from 'lodash';
 export const PortfolioContext = createContext();
 
-const PortfolioContextProvider = ({ user, setUser, children }) => {
+const PortfolioContextProvider = (props) => {
   const [stocks, setStocks] = useState([]);
 
   useEffect(() => {
@@ -24,17 +24,13 @@ const PortfolioContextProvider = ({ user, setUser, children }) => {
   };
 
   const getPortfolio = async () => {
-    return await fetch(
-      `${process.env.REACT_APP_STOCKSIMPLE_API}/portfolio/fetch`,
-      {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({ user_id: user }),
-      }
-    )
+    return await fetch(`${process.env.REACT_APP_STOCKSIMPLE_API}/portfolio`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+      },
+      credentials: 'include',
+    })
       .then((res) => {
         if (res.status === 401) {
           window.alert(
@@ -57,7 +53,7 @@ const PortfolioContextProvider = ({ user, setUser, children }) => {
           'Content-Type': 'application/json',
         },
         credentials: 'include',
-        body: JSON.stringify({ stocks, user }),
+        body: JSON.stringify(stocks),
       })
         .then((res) => res.json())
         .then(() => {});
@@ -121,10 +117,9 @@ const PortfolioContextProvider = ({ user, setUser, children }) => {
         fetchStocks,
         setStocks,
         getPortfolio,
-        setUser,
       }}
     >
-      {children}
+      {props.children}
     </PortfolioContext.Provider>
   );
 };
