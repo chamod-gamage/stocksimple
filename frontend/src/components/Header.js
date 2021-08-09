@@ -19,8 +19,12 @@ const Header = ({ unauthorized = false }) => {
             {stocks?.length > 0 && !unauthorized ? (
               <h1>
                 {' '}
-                Your current balance is ${val.toFixed(2)} USD (
-                {val / prices > 1 && '+'}
+                Your current balance is{' '}
+                {new Intl.NumberFormat('en-US', {
+                  style: 'currency',
+                  currency: 'USD',
+                }).format(val)}{' '}
+                USD ({val / prices > 1 && '+'}
                 {((val / prices) * 100 - 100).toFixed(2)}% returns)
               </h1>
             ) : (
