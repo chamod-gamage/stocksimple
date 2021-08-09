@@ -23,7 +23,7 @@ export const generateToken = (res, _id, username) => {
   const token = jwt.sign({ _id, username }, process.env.JWT_SECRET, {
     expiresIn: process.env.NODE_ENV !== 'production' ? '1d' : '7d',
   });
-  return res.cookie('token', token, {
+  return res.cookie('stocksimple_token', token, {
     expires: new Date(Date.now() + expiration),
     secure: process.env.NODE_ENV === 'production',
     httpOnly: true,

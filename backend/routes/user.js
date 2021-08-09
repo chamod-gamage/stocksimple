@@ -61,7 +61,7 @@ app.post('/login', async (req, res) => {
 
 app.post('/logout', async (req, res) => {
   try {
-    res.clearCookie('token');
+    res.clearCookie('stocksimple_token');
     res.send();
   } catch (error) {
     res.status(500).send(error);
