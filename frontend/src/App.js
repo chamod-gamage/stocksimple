@@ -10,7 +10,7 @@ import './index.scss';
 
 function App() {
   const [authorized, setAuthorized] = useState(null);
-  const [authPage, setAuthPage] = useState('login');
+  const [user, setUser] = useState('');
 
   useEffect(() => {
     ReactGA.initialize('UA-170137058-3');
@@ -20,6 +20,7 @@ function App() {
     })
       .then((res) => res.json())
       .then((data) => {
+        setUser(data._id);
         setAuthorized(data.authorized === true);
       })
       .catch((err) => {
@@ -30,20 +31,18 @@ function App() {
   return (
     <div className="App">
       <div className="container mt-5">
-        <PortfolioContextProvider>
-          {authorized === true ? (
-            <>
-              <StockList />
-              <Footer />
-            </>
-          ) : authorized === false ? (
-            <AuthForm setAuthorized={setAuthorized} />
-          ) : (
-            <div>
-              <h1>Spinning up server...</h1>
-            </div>
-          )}
-        </PortfolioContextProvider>
+        {authorized === true ? (
+          <PortfolioContextProvider user={user} setUser={setUser}>
+            <StockList setAuthorized={setAuthorized} />
+            <Footer />
+          </PortfolioContextProvider>
+        ) : authorized === false ? (
+          <AuthForm setAuthorized={setAuthorized} />
+        ) : (
+          <div>
+            <h1>Spinning up server...</h1>
+          </div>
+        )}
       </div>
       <br />
     </div>

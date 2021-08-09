@@ -1,13 +1,11 @@
 import React, { useContext, useState } from 'react';
 import { SectionHead } from './SectionHead';
-import Header from './Header';
-import { PortfolioContext } from '../contexts/PortfolioContext';
+
 const AuthForm = ({ setAuthorized }) => {
   const [login, setLogin] = useState(true);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const { getPortfolio } = useContext(PortfolioContext);
 
   const handleSubmit = async () => {
     fetch(
@@ -38,7 +36,6 @@ const AuthForm = ({ setAuthorized }) => {
       .then((data) => {
         if (data.username) {
           setAuthorized(true);
-          getPortfolio();
         }
       })
       .catch((err) => {
@@ -50,7 +47,17 @@ const AuthForm = ({ setAuthorized }) => {
 
   return (
     <>
-      <Header unauthorized />
+      <div>
+        <div className="container mt-5">
+          <div className="row">
+            <div className="col">
+              <h1>📈</h1>
+              <h1>Start tracking your stocks today!</h1>
+              <br />
+            </div>
+          </div>
+        </div>
+      </div>
       <div className="form login">
         <div className="input-row">
           <div className="input-block">
