@@ -4,28 +4,31 @@ import StockDetails from './StockDetails';
 import StockForm from './StockForm';
 import Header from './Header';
 
-const StockList = ({ setAuthorized }) => {
+const StockList = ({ setAuthorized, authorized, setShowForm }) => {
   const [trigger, setTrigger] = useState(false);
-  const { stocks, fetchStocks } = useContext(PortfolioContext);
+  const { stocks, login, getPortfolio } = useContext(PortfolioContext);
 
   useEffect(() => {
-    fetchStocks();
+    getPortfolio();
     setTrigger(true);
   }, []);
 
-  const logout = () => {
-    fetch(`${process.env.REACT_APP_STOCKSIMPLE_API}/users/logout`, {
-      method: 'POST',
-      credentials: 'include',
-      mode: 'cors',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({}),
-    }).then(() => {
-      setAuthorized(false);
-    });
+  const handleButton = () => {
+    if (authorized) {
+      fetch(`${process.env.REACT_APP_STOCKSIMPLE_API}/users/logout`, {
+        method: 'POST',
+        credentials: 'include',
+        mode: 'cors',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({}),
+      }).then(() => {
+        setAuthorized(false);
+      });
+    }
+    setShowForm(true);
   };
 
   return !trigger ? (
@@ -33,15 +36,22 @@ const StockList = ({ setAuthorized }) => {
   ) : (
     <div>
       <div className="logout">
-        <button className="btn btn-primary" onClick={logout}>
-          <h2>Log Out</h2>
+        <div>
+          <h2>
+            {authorized ? '' : 'To access your portfolio across devices:'}
+          </h2>
+        </div>
+        <button className="btn btn-primary" onClick={handleButton}>
+          <h2>
+            {authorized ? 'Log Out' : login ? 'Sign In' : 'Create Account'}
+          </h2>
         </button>
       </div>
       <Header />
       <StockForm buttonText={'Add Holding'} />
       <button
         onClick={(e) => {
-          fetchStocks();
+          getPortfolio();
         }}
         className="btn btn-primary"
       >

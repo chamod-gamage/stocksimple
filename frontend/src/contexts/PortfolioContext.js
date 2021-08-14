@@ -5,15 +5,21 @@ export const PortfolioContext = createContext();
 
 const PortfolioContextProvider = (props) => {
   const [stocks, setStocks] = useState([]);
+  const [fetched, setFetched] = useState(false);
+  const [visited, setVisited] = useState(
+    localStorage.getItem('stocks') && localStorage.getItem('stocks').length > 0
+  );
 
   useEffect(() => {
-    localStorage.setItem('stocks', JSON.stringify(stocks));
-    postPortfolio();
+    if (fetched) {
+      localStorage.setItem('stocks', JSON.stringify(stocks));
+      postPortfolio();
+    }
   }, [stocks]);
 
   useEffect(() => {
     getPortfolio();
-  }, []);
+  }, [props.authorized]);
 
   const getTradier = {
     method: 'GET',
@@ -24,28 +30,34 @@ const PortfolioContextProvider = (props) => {
   };
 
   const getPortfolio = async () => {
-    return await fetch(`${process.env.REACT_APP_STOCKSIMPLE_API}/portfolio`, {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-      },
-      credentials: 'include',
-    })
-      .then((res) => {
-        if (res.status === 401) {
-          window.alert(
-            'Please enable 3rd party cookies to use this app. This is likely disabled on Incognito/Private mode.'
-          );
-        }
-        return res.json();
+    if (props.authorized && props.login) {
+      await fetch(`${process.env.REACT_APP_STOCKSIMPLE_API}/portfolio`, {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+        },
+        credentials: 'include',
       })
-      .then((data) => {
-        fetchStocks(data.holdings);
-      });
+        .then((res) => {
+          if (res.status === 401) {
+            window.alert(
+              `Please enable 3rd party cookies to save your portfolio across devices under your account. 
+              Otherwise, your data will only be saved on your current device. 
+              This is likely disabled on Incognito/Private mode.`
+            );
+          }
+          return res.json();
+        })
+        .then((data) => {
+          fetchStocks(data.holdings);
+        });
+    } else {
+      fetchStocks(JSON.parse(localStorage.getItem('stocks')) || []);
+    }
   };
 
   const postPortfolio = async () => {
-    if (stocks?.length > 0) {
+    if (stocks?.length > 0 && props.authorized) {
       fetch(`${process.env.REACT_APP_STOCKSIMPLE_API}/portfolio`, {
         method: 'POST',
         headers: {
@@ -80,8 +92,11 @@ const PortfolioContextProvider = (props) => {
             newStocks[i].symbol = stockArray[i].symbol;
             newStocks[i].value = data?.quotes?.quote?.last;
             setStocks(newStocks);
+            setFetched(true);
           });
       }
+    } else {
+      setFetched(true);
     }
   };
 
@@ -117,6 +132,9 @@ const PortfolioContextProvider = (props) => {
         fetchStocks,
         setStocks,
         getPortfolio,
+        visited,
+        setVisited,
+        login: props.login,
       }}
     >
       {props.children}

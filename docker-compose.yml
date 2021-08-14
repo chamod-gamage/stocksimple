@@ -1,0 +1,46 @@
+version: '3.9'
+services:
+  frontend:
+    container_name: stocksimple_frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    volumes:
+      - /usr/src/app/node_modules
+      - type: bind
+        source: ./frontend
+        target: /usr/src/app
+        consistency: cached
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    env_file: frontend/.env
+    command: npm start
+    stdin_open: true
+    tty: true
+    ports:
+      - 3000:3000
+    networks:
+      - grocery_network
+  backend:
+    container_name: stocksimple_backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    volumes:
+      - /usr/src/app/node_modules
+      - type: bind
+        source: ./backend
+        target: /usr/src/app
+        consistency: cached
+    env_file: backend/.env
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    command: npm run dev
+    ports:
+      - 5555:5555
+    networks:
+      - grocery_network
+
+networks:
+  grocery_network:
+    external: true
