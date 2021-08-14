@@ -1,7 +1,7 @@
 ## Stocksimple 📈
 
 Stocksimple is a web app built for personal use but free for anyone to use at https://stocksimple.netlify.app in order to keep track of your stock portfolio in a hassle-free manner.
-*Note that 3rd party cookies must be enabled*
+*Note that 3rd party cookies must be enabled to save portfolios to account across devices*
 
 ### Technologies
 **Frontend**
