@@ -11,10 +11,16 @@ import './index.scss';
 function App() {
   const [authorized, setAuthorized] = useState(null);
   const [user, setUser] = useState('');
+  const [showForm, setShowForm] = useState(true);
+  const [login, setLogin] = useState(false);
 
   useEffect(() => {
+    console.log(process.env.REACT_APP_STOCKSIMPLE_API);
     ReactGA.initialize('UA-170137058-3');
     ReactGA.pageview('/homepage');
+    if (localStorage.getItem('stocks')) {
+      setLogin(true);
+    }
     fetch(`${process.env.REACT_APP_STOCKSIMPLE_API}/users/authorized`, {
       credentials: 'include',
     })
@@ -22,6 +28,7 @@ function App() {
       .then((data) => {
         setUser(data._id);
         setAuthorized(data.authorized === true);
+        setShowForm(false);
       })
       .catch((err) => {
         setAuthorized(false);
@@ -31,13 +38,40 @@ function App() {
   return (
     <div className="App">
       <div className="container mt-5">
-        {authorized === true ? (
-          <PortfolioContextProvider user={user} setUser={setUser}>
-            <StockList setAuthorized={setAuthorized} />
-            <Footer />
-          </PortfolioContextProvider>
-        ) : authorized === false ? (
-          <AuthForm setAuthorized={setAuthorized} />
+        {/* {JSON.stringify(login)} */}
+        {authorized !== null ? (
+          !showForm || authorized ? (
+            <PortfolioContextProvider
+              authorized={authorized}
+              user={user}
+              setUser={setUser}
+              login={login}
+            >
+              <StockList
+                setShowForm={setShowForm}
+                authorized={authorized}
+                setAuthorized={setAuthorized}
+              />
+              <Footer />
+            </PortfolioContextProvider>
+          ) : (
+            <>
+              <AuthForm
+                setShowForm={setShowForm}
+                setAuthorized={setAuthorized}
+                login={login}
+                setLogin={setLogin}
+              />
+              <button
+                onClick={() => {
+                  setShowForm(false);
+                }}
+                className="btn btn-primary"
+              >
+                Continue without{login ? ' logging in ' : ' signing up '}→
+              </button>
+            </>
+          )
         ) : (
           <div>
             <h1>Spinning up server...</h1>

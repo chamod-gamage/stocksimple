@@ -1,8 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { SectionHead } from './SectionHead';
 
-const AuthForm = ({ setAuthorized }) => {
-  const [login, setLogin] = useState(true);
+const AuthForm = ({ setAuthorized, login, setLogin, setShowForm }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -36,6 +35,7 @@ const AuthForm = ({ setAuthorized }) => {
       .then((data) => {
         if (data.username) {
           setAuthorized(true);
+          setLogin(true);
         }
       })
       .catch((err) => {
@@ -52,7 +52,11 @@ const AuthForm = ({ setAuthorized }) => {
           <div className="row">
             <div className="col">
               <h1>📈</h1>
-              <h1>Start tracking your stocks today!</h1>
+              <h1>
+                {login
+                  ? 'Welcome back to StockSimple!'
+                  : 'Start tracking your stocks today!'}
+              </h1>
               <br />
             </div>
           </div>
