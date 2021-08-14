@@ -21,10 +21,20 @@ Stocksimple is a web app built for personal use but free for anyone to use at ht
 **Deployment**
 Frontend on Netlify (CD), backend on Heroku (CD), and database on MongoDB Atlas
 
+Docker-compose + Dockerfiles
+
 ### Running locally
 To see the code in action on your local development server:
 1. Clone the repo
 2. Set up account for [Tradier Developer API](https://developer.tradier.com/) and cluster for [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
+
+
+**WITH DOCKER**
+1. Create `.env` with necessary environment variables in `frontend` and `backend` folders
+2. Run `docker-compose up --build`
+
+
+**WITHOUT DOCKER**
 
 **Frontend**
 1. `cd frontend`
@@ -37,5 +47,6 @@ To see the code in action on your local development server:
 2. Run `npm install` to import the necessary packages
 3. Create `.env` with necessary environment variables
 4. Run `npm run dev` to start the development server on `localhost:${process.env.PORT}`
+
 
 Have fun!
