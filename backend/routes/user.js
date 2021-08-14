@@ -62,7 +62,6 @@ app.post('/login', async (req, res) => {
 app.post('/logout', async (req, res) => {
   try {
     res.clearCookie('stocksimple_token', {
-      expires: new Date(Date.now() + expiration),
       secure: process.env.NODE_ENV === 'production',
       httpOnly: true,
       sameSite: 'none',
