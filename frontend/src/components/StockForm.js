@@ -68,29 +68,33 @@ const StockForm = (props) => {
       });
   };
 
-  const searchStock = (query) => {
-    fetch(`https://sandbox.tradier.com/v1/markets/lookup?q=${query}`, get)
-      .then(function (response) {
-        return response.json();
-      })
-      .then(function (data) {
-        data.securities.security.length > 1
-          ? setOptions(
-              data?.securities?.security?.map((item) => ({
+  const searchStock = async (query) => {
+    try {
+      let results = await Promise.all([
+        fetch(
+          `https://sandbox.tradier.com/v1/markets/search?q=${query}`,
+          get
+        ).then((res) => res.json()),
+        fetch(
+          `https://sandbox.tradier.com/v1/markets/lookup?q=${query}`,
+          get
+        ).then((res) => res.json()),
+      ]);
+      let unfilteredOptions = results.flatMap((data) =>
+        data?.securities?.security
+          ? [data?.securities?.security] //the api annoyingly returns an object instead of array of objects when there's only one security
+              ?.flatMap((arr) => arr)
+              .map((item) => ({
                 value: item.symbol,
                 label: `${item.symbol} - ${item.description}`,
               }))
-            )
-          : setOptions([
-              {
-                value: data?.securities?.security?.symbol,
-                label: `${data?.securities?.security?.symbol} - ${data?.securities?.security?.description}`,
-              },
-            ]);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+          : []
+      );
+      let filteredOptions = _.uniqBy(unfilteredOptions, 'value') || [];
+      setOptions(filteredOptions);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   useEffect(() => {
