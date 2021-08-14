@@ -28,10 +28,11 @@ function App() {
       .then((data) => {
         setUser(data._id);
         setAuthorized(data.authorized === true);
-        setShowForm(data.authorized !== true);
+        setShowForm(data.authorized !== true && localStorage.getItem('stocks'));
       })
       .catch((err) => {
         setAuthorized(false);
+        setShowForm(localStorage.getItem('stocks') && true);
       });
   }, []);
 
