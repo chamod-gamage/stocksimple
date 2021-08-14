@@ -5,6 +5,7 @@ import { Select } from '@shopify/polaris';
 import CurrencyInput from 'react-currency-input-field';
 import { TextField, AppProvider } from '@shopify/polaris';
 import moment from 'moment';
+import _ from 'lodash'
 
 const StockForm = (props) => {
   const { addStock } = useContext(PortfolioContext);
