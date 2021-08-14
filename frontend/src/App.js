@@ -15,11 +15,11 @@ function App() {
   const [login, setLogin] = useState(false);
 
   useEffect(() => {
-    console.log(process.env.REACT_APP_STOCKSIMPLE_API);
     ReactGA.initialize('UA-170137058-3');
     ReactGA.pageview('/homepage');
     if (localStorage.getItem('stocks')) {
       setLogin(true);
+      setShowForm(true);
     }
     fetch(`${process.env.REACT_APP_STOCKSIMPLE_API}/users/authorized`, {
       credentials: 'include',
@@ -28,7 +28,7 @@ function App() {
       .then((data) => {
         setUser(data._id);
         setAuthorized(data.authorized === true);
-        setShowForm(false);
+        setShowForm(data.authorized !== true);
       })
       .catch((err) => {
         setAuthorized(false);
